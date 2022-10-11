@@ -1,0 +1,17 @@
+{
+  "name": "exhealthcheck",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start-simple": "node simple-node/index.js",
+    "start": "cd nestjs/ && npm start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodejs-health-checker": "file:health-checker"
+  }
+}
