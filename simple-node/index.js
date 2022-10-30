@@ -3,11 +3,7 @@ const {
   HealthcheckerSimpleCheck,
   HealthcheckerDetailedCheck,
 } = require("nodejs-health-checker/dist/healthchecker/healthchecker");
-const {
-  HealthTypes,
-  Dialects,
-  Auth,
-} = require("nodejs-health-checker/dist/interfaces/types");
+const { HealthTypes } = require("nodejs-health-checker/dist/interfaces/types");
 const server = express();
 server.get("/", (req, res) => {
   res.json({ status: "I'm alive!" });
@@ -24,6 +20,15 @@ server.get("/health-check/readiness", async (req, res) => {
         type: HealthTypes.Web,
         name: "A simple api integration check",
         host: "https://github.com/status",
+      },
+      {
+        type: HealthTypes.Redis,
+        name: "redis integration",
+        host: "compute.amazonaws.com",
+        port: 00000,
+        auth: {
+          password: "password",
+        },
       },
       {
         type: HealthTypes.Custom,
