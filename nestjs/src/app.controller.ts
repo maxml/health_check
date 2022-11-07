@@ -4,7 +4,7 @@ import {
   HealthcheckerSimpleCheck,
   HealthcheckerDetailedCheck,
   HealthTypes,
-} from '../../health-checker/dist';
+} from 'nodejs-health-checker';
 
 @Controller()
 export class AppController {
