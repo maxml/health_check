@@ -69,16 +69,13 @@ export interface HTTPHeader {
 // Mapped types for IntegrationConfig
 export enum HealthTypes {
   Redis = "Redis",
-  Memcached = "Memcached",
   Web = "Web",
-  Dynamo = "Dynamo",
   Database = "Database",
   Custom = "Custom",
 }
 // Mapped types for kinds of integrations
 export enum HealthIntegration {
   RedisIntegration = "Redis DB integration",
-  MemcachedIntegration = "Memcached integraton",
   WebServiceIntegration = "Web integrated API",
   DynamoDbIntegration = "AWS Dynamo DB",
   DatabaseIntegration = "Database integration",
@@ -89,7 +86,6 @@ export enum Defaults {
   RedisTimeout = 2 * 1000,
   RedisDB = 0,
   RedisPort = 6379,
-  MemcachedTimeout = 1000,
   MemcachePort = 11211,
   WebTimeout = 10 * 1000,
 }
@@ -102,6 +98,4 @@ export interface HTTPChecker {
 export enum Dialects {
   postgres = "postgres",
   mysql = "mysql",
-  // sqlite = "sqlite",
-  mariadb = "mariadb",
 }

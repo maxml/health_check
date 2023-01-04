@@ -1,5 +1,5 @@
 import { Dialects, HealthTypes, IntegrationConfig } from "../../src/interfaces/types";
-import { REDIS_HOST, MEMCACHED_HOST, WEB_HOST, DYNAMO_HOST, DATABASE_HOST } from "../../src/envs";
+import { REDIS_HOST, WEB_HOST, DATABASE_HOST } from "../../src/envs";
 
 export interface HealthCheckDetailedTestScenario {
   [key: string]: HealthCheckDetailedTestConfig;
@@ -31,34 +31,6 @@ export const scenarios: HealthCheckDetailedTestScenario = {
       },
     },
   },
-  memcachedTruthy: {
-    expected: true,
-    config: {
-      name: "jest-test-memcached",
-      type: HealthTypes.Memcached,
-      host: MEMCACHED_HOST,
-      port: 11211,
-    },
-  },
-  memcachedDefaultTimeout: {
-    expected: true,
-    config: {
-      name: "jest-test-memcached",
-      type: HealthTypes.Memcached,
-      host: MEMCACHED_HOST,
-      port: 11211,
-      timeout: 1001,
-    },
-  },
-  memcachedFalsy: {
-    expected: false,
-    config: {
-      name: "jest-test-memcached",
-      type: HealthTypes.Memcached,
-      host: MEMCACHED_HOST,
-      port: 11299,
-    },
-  },
   webIntegrationTruthy: {
     expected: true,
     config: {
@@ -86,29 +58,6 @@ export const scenarios: HealthCheckDetailedTestScenario = {
       host: `${WEB_HOST}sssssssss`,
       timeout: 4,
       headers: [{ key: "Accept", value: "application/json" }],
-    },
-  },
-  dynamoIntegrationTruthy: {
-    expected: true,
-    config: {
-      type: HealthTypes.Dynamo,
-      name: "jest-test-dynamodb",
-      host: DYNAMO_HOST,
-      port: 8000,
-      Aws: {
-        region: "us-east-1",
-        access_key_id: "",
-        secret_access_key: "",
-      },
-    },
-  },
-  dynamoIntegrationFalsy: {
-    expected: false,
-    config: {
-      type: HealthTypes.Dynamo,
-      name: "jest-test-dynamodb",
-      host: DYNAMO_HOST,
-      port: 8001,
     },
   },
   databaseIntegrationTruthy: {

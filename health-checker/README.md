@@ -42,25 +42,11 @@ This is a Node package that allows you to track the health of your application, 
             "url": "redis:6379"
         },
         {
-            "name": "My memcache integration",
-            "kind": "Memcached integraton",
-            "status": true,
-            "response_time": 0.038,
-            "url": "memcache:11211"
-        },
-        {
             "name": "my web api integration",
             "kind": "Web integrated API",
             "status": true,
             "response_time": 0.511,
             "url": "https://github.com/status"
-        },
-        {
-            "name": "my dynamo",
-            "kind": "AWS Dynamo DB",
-            "status": true,
-            "response_time": 0.004,
-            "url": "http://localhost:8000",
         }
     ]
 }
@@ -75,9 +61,7 @@ npm i nodejs-health-checker
 ## Available integrations
 
 - [x] Redis
-- [x] Memcached
 - [x] Web integration (https)
-- [x] AWS DynamoDB
 - [x] Sequelize (authored by @MikeG96)
 - [x] Custom integration support (authored by @youngpayters)
 
@@ -108,7 +92,6 @@ server.get("/health-check/readiness", async (_, res) => {
       // that your application must be checked to keep healthy
       // available integration types: [
       //   HealthTypes.Redis,
-      //   HealthTypes.Memcached,
       //   HealthTypes.Web
       //   HealthTypes.Custom
       // ]
@@ -119,26 +102,10 @@ server.get("/health-check/readiness", async (_, res) => {
           host: "redis",
         },
         {
-          type: HealthTypes.Memcached,
-          name: "My memcache integration",
-          host: "memcache:11211",
-        },
-        {
           type: HealthTypes.Web,
           name: "my web api integration",
           host: "https://github.com/status",
           headers: [{ key: "Accept", value: "application/json" }],
-        },
-        {
-          type: HealthTypes.Dynamo,
-          name: "my dynamo",
-          host: "http://localhost",
-          port: 8000,
-          Aws: {
-            region: "us-east-1",
-            access_key_id: "",
-            secret_access_key: "",
-          },
         },
         {
           type: HealthTypes.Database,

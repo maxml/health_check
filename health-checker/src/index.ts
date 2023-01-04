@@ -1,5 +1,3 @@
-import server from "./server";
-
-server.listen(8888, () => {
-  console.log(`[SERVER] Running at http://localhost:8888`);
-});
+export { HealthcheckerSimpleCheck, HealthcheckerDetailedCheck } from "./healthchecker/healthchecker";
+export { HealthTypes } from "./interfaces/types";
+export { HealthCheckModule } from "./healthCheck.module";
