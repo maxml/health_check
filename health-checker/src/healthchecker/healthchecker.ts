@@ -27,7 +27,9 @@ export function HealthcheckerSimpleCheck(): ApplicationHealthSimple {
  * @param config ApplicationConfig
  * @return ApplicationHealthDetailed
  */
-export async function HealthcheckerDetailedCheck(config: ApplicationConfig): Promise<ApplicationHealthDetailed> {
+export async function HealthcheckerDetailedCheck(
+  config: ApplicationConfig
+): Promise<ApplicationHealthDetailed> {
   const promisesList: Promise<Integration>[] = [];
   const start = new Date().getTime();
   config.integrations.forEach((item) => {
@@ -71,7 +73,6 @@ async function redisCheck(config: IntegrationConfig): Promise<Integration> {
     kind: HealthIntegration.RedisIntegration,
     status: result.status,
     response_time: getDeltaTime(start),
-    url: resolveHost(config).host,
     error: result.error,
   };
 }
@@ -85,7 +86,6 @@ async function webCheck(config: IntegrationConfig): Promise<Integration> {
     kind: HealthIntegration.WebServiceIntegration,
     status: result.status,
     response_time: getDeltaTime(start),
-    url: config.host,
     error: result.error,
   };
 }
@@ -99,7 +99,6 @@ async function databaseCheck(config: IntegrationConfig): Promise<Integration> {
     kind: HealthIntegration.DatabaseIntegration,
     status: result.status,
     response_time: getDeltaTime(start),
-    url: config.host,
     error: result.error,
   };
 }
@@ -114,13 +113,14 @@ async function customCheck(config: IntegrationConfig): Promise<Integration> {
   const start = new Date().getTime();
   config.timeout = config.timeout || Defaults.WebTimeout;
   try {
-    const result = config.customCheckerFunction ? await config.customCheckerFunction() : { status: false, error: "No custom function present" };
+    const result = config.customCheckerFunction
+      ? await config.customCheckerFunction()
+      : { status: false, error: "No custom function present" };
     return {
       name: config.name,
       kind: HealthIntegration.CustomIntegration,
       status: result.status,
       response_time: getDeltaTime(start),
-      url: config.host,
       error: result.error,
     };
   } catch (error) {

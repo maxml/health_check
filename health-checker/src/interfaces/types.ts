@@ -1,5 +1,3 @@
-import { Dialect } from "sequelize/types";
-
 /**
  * ApplicationHealth used to check all application integrations
  * and return status of each of then
@@ -22,7 +20,7 @@ export interface Integration {
   kind: HealthIntegration;
   status: boolean;
   response_time: number;
-  url: string;
+  url?: string;
   error?: any;
 }
 // Auth is a default  to map user/pass protocol
@@ -50,7 +48,6 @@ export interface IntegrationConfig {
   dbName?: string;
   dbUser?: string;
   dbPwd?: string;
-  dbDialect?: Dialect;
   dbPort?: number;
   customCheckerFunction?(): Promise<HTTPChecker>;
 }

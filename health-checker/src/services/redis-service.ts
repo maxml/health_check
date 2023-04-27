@@ -6,12 +6,14 @@ export async function checkRedisClient(config: IntegrationConfig): Promise<HTTPC
     const client = new Redis(config.port || 6379, config.host, {
       db: config.db || 0,
       password: config.auth?.password,
-      timeout: config.timeout || Defaults.RedisTimeout,
+      connectTimeout: config.timeout || Defaults.RedisTimeout,
       tls: {
         rejectUnauthorized: false,
       },
     });
     client.on("error", (error: any) => {
+      console.log(error);
+      
       client.disconnect();
       resolve({
         status: false,

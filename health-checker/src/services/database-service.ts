@@ -1,21 +1,24 @@
-import { Sequelize } from "sequelize";
+import { Client, ClientConfig } from "pg";
 import { HTTPChecker, IntegrationConfig } from "../interfaces/types";
 
 export async function checkDatabaseClient(config: IntegrationConfig): Promise<HTTPChecker> {
-  const { dbName, dbUser, dbPwd, dbDialect, dbPort, host } = config;
-
   return new Promise(async (resolve, _) => {
-    // init sequelize
-    const sequelize = new Sequelize(dbName || "postgres", dbUser || "", dbPwd, {
-      dialect: dbDialect || "mysql",
-      port: dbPort,
-      host,
-      logging: false,
-    });
+    // init postgres db
+    const dbConfig: ClientConfig = {
+      user: config.dbUser,
+      database: config.dbName,
+      password: config.dbPwd,
+      port: config.dbPort,
+      host: config.host,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    };
+    const db = new Client(dbConfig);
     // check authenticate to database
     try {
-      await sequelize.authenticate();
-      await sequelize.close();
+      await db.connect();
+      await db.end();
       resolve({
         status: true,
       });
