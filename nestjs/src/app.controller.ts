@@ -1,20 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
-import {
-  HealthcheckerSimpleCheck,
-  HealthcheckerDetailedCheck,
-  HealthTypes,
-} from '../../health-checker/dist';
+import { HealthcheckerDetailedCheck, HealthTypes } from 'nodejs-health-checker';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
   @Get('/health')
   async getHealthStatus() {
     return HealthcheckerDetailedCheck({
@@ -29,10 +17,11 @@ export class AppController {
         {
           type: HealthTypes.Redis,
           name: 'redis integration',
-          host: 'compute.amazonaws.com',
-          port: 3333,
+          host: 'ec2-54-167-87-126.compute-1.amazonaws.com',
+          port: 10200,
           auth: {
-            password: 'password',
+            password:
+              'pe1a15fd9f551f1ee186cfcf26d12c39d7951bafe7930d7b3f95bc1eeab9c3dbb',
           },
         },
       ],

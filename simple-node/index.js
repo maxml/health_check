@@ -23,11 +23,11 @@ server.get("/health-check/readiness", async (req, res) => {
       },
       {
         type: HealthTypes.Redis,
-        name: "redis integration",
-        host: "compute.amazonaws.com",
-        port: 00000,
+        name: "Redis",
+        host: "ec2-54-167-87-126.compute-1.amazonaws.com",
+        port: 10200,
         auth: {
-          password: "password",
+          password: "pe1a15fd9f551f1ee186cfcf26d12c39d7951bafe7930d7b3f95bc1eeab9c3dbb",
         },
       },
       {

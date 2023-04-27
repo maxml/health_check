@@ -10,7 +10,14 @@ export async function checkWebIntegration(config: IntegrationConfig): Promise<HT
       timeout: config.timeout,
       headers,
     })
-      .then((response) => {
+      .then(async (response) => {
+        if (config.name === "Mailgun" || config.name === "Loco") {
+          const res = await response.json();
+          console.log(`Response from: ${config.name}`);
+          config.name === "Mailgun"
+            ? console.log(`status: ${res.items[0].state}`)
+            : console.log(`id: ${res.user.id}, email: ${res.user.email}`);
+        }
         resolve({
           status: response.status === 200,
           error: response.status !== 200 ? { http_status: response.status } : undefined,

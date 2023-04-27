@@ -9,8 +9,6 @@ import {
   IntegrationConfig,
 } from "../interfaces/types";
 import { checkDatabaseClient } from "../services/database-service";
-import { checkDynamodbClient } from "../services/dynamodb-service";
-import { checkMemcachedClient } from "../services/memcache-service";
 import { checkRedisClient } from "../services/redis-service";
 import { checkWebIntegration } from "../services/web-service";
 
@@ -29,7 +27,9 @@ export function HealthcheckerSimpleCheck(): ApplicationHealthSimple {
  * @param config ApplicationConfig
  * @return ApplicationHealthDetailed
  */
-export async function HealthcheckerDetailedCheck(config: ApplicationConfig): Promise<ApplicationHealthDetailed> {
+export async function HealthcheckerDetailedCheck(
+  config: ApplicationConfig
+): Promise<ApplicationHealthDetailed> {
   const promisesList: Promise<Integration>[] = [];
   const start = new Date().getTime();
   config.integrations.forEach((item) => {
@@ -37,14 +37,8 @@ export async function HealthcheckerDetailedCheck(config: ApplicationConfig): Pro
       case HealthTypes.Redis:
         promisesList.push(redisCheck(item));
         break;
-      case HealthTypes.Memcached.toString():
-        promisesList.push(memcacheCheck(resolveHost(item)));
-        break;
       case HealthTypes.Web:
         promisesList.push(webCheck(resolveHost(item)));
-        break;
-      case HealthTypes.Dynamo:
-        promisesList.push(dynamoCheck(resolveHost(item)));
         break;
       case HealthTypes.Database:
         promisesList.push(databaseCheck(resolveHost(item)));
@@ -79,31 +73,10 @@ async function redisCheck(config: IntegrationConfig): Promise<Integration> {
     kind: HealthIntegration.RedisIntegration,
     status: result.status,
     response_time: getDeltaTime(start),
-    url: resolveHost(config).host,
     error: result.error,
   };
 }
-/**
- * memcacheCheck used to check all Memcached integrations informed
- * @param config IntegrationConfig with memcached parameters
- */
-async function memcacheCheck(config: IntegrationConfig): Promise<Integration> {
-  const start = new Date().getTime();
-  config.timeout = config.timeout || Defaults.MemcachedTimeout;
-  const check = await checkMemcachedClient(config);
-  return {
-    name: config.name,
-    kind: HealthIntegration.MemcachedIntegration,
-    status: check.status,
-    response_time: getDeltaTime(start),
-    url: config.host,
-    error: check.error,
-  };
-}
-/**
- * memcacheCheck used to check all Memcached integrations informed
- * @param config IntegrationConfig with memcached parameters
- */
+
 async function webCheck(config: IntegrationConfig): Promise<Integration> {
   const start = new Date().getTime();
   config.timeout = config.timeout || Defaults.WebTimeout;
@@ -113,21 +86,6 @@ async function webCheck(config: IntegrationConfig): Promise<Integration> {
     kind: HealthIntegration.WebServiceIntegration,
     status: result.status,
     response_time: getDeltaTime(start),
-    url: config.host,
-    error: result.error,
-  };
-}
-
-async function dynamoCheck(config: IntegrationConfig): Promise<Integration> {
-  const start = new Date().getTime();
-  config.timeout = config.timeout || Defaults.WebTimeout;
-  const result = await checkDynamodbClient(config);
-  return {
-    name: config.name,
-    kind: HealthIntegration.DynamoDbIntegration,
-    status: result.status,
-    response_time: getDeltaTime(start),
-    url: config.host,
     error: result.error,
   };
 }
@@ -141,7 +99,6 @@ async function databaseCheck(config: IntegrationConfig): Promise<Integration> {
     kind: HealthIntegration.DatabaseIntegration,
     status: result.status,
     response_time: getDeltaTime(start),
-    url: config.host,
     error: result.error,
   };
 }
@@ -156,13 +113,14 @@ async function customCheck(config: IntegrationConfig): Promise<Integration> {
   const start = new Date().getTime();
   config.timeout = config.timeout || Defaults.WebTimeout;
   try {
-    const result = config.customCheckerFunction ? await config.customCheckerFunction() : { status: false, error: "No custom function present" };
+    const result = config.customCheckerFunction
+      ? await config.customCheckerFunction()
+      : { status: false, error: "No custom function present" };
     return {
       name: config.name,
       kind: HealthIntegration.CustomIntegration,
       status: result.status,
       response_time: getDeltaTime(start),
-      url: config.host,
       error: result.error,
     };
   } catch (error) {
